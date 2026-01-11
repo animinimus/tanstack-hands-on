@@ -14,13 +14,17 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth-client'
 import { loginSchema } from '@/schemas/auth'
 import { useForm } from '@tanstack/react-form'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 export function LoginForm() {
+  const navigate = useNavigate()
+
   const form = useForm({
-    defaultValues: {
+    defaultValues: { 
       email: '',
       password: '',
     },
@@ -28,7 +32,22 @@ export function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value)
+      await authClient.signIn.email({
+        email: value.email,
+        password: value.password,
+        // callbackURL: '/dashboard',
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success('Login successful')
+            navigate({
+              to: '/'
+            })
+          },
+          onError: ({ error }) => {
+            toast.error(error.message)
+          }
+        }
+      })
     },
   })
 
