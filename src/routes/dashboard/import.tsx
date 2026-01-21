@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { scrapeUrlFn } from '@/data/items'
 import { bulkImportSchema, importSchema } from '@/schemas/import'
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
@@ -37,6 +38,7 @@ function RouteComponent() {
     onSubmit: ({ value }) => {
       startTransition(async () => {
         console.log(value)
+        await scrapeUrlFn({ data: value })
       })
     },
   })
@@ -127,7 +129,7 @@ function RouteComponent() {
                       {isPending ? (
                         <>
                           <Loader2 className="size-4 animate-spin" />
-                          "Processing..."
+                          Processing...
                         </>
                       ) : (
                         'Import URL'
@@ -219,7 +221,7 @@ function RouteComponent() {
                       {isPending ? (
                         <>
                           <Loader2 className="size-4 animate-spin" />
-                          "Processing..."
+                          Processing...
                         </>
                       ) : (
                         'Import URLs'
