@@ -12,6 +12,7 @@ export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
   loader: async () => {
     const session = await getSessionFn()
+    
     return {
       user: session.user,
     }
